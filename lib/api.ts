@@ -90,24 +90,44 @@ const mockWebhookEvents: WebhookEvent[] = [
   },
 ]
 
-export async function searchNews(query: string): Promise<SearchResponse> {
-  // Simulate API delay
-  await new Promise((resolve) => setTimeout(resolve, 800))
+// API utilities for News Intelligence Hub
 
-  // Filter mock data based on query
-  const filteredResults = mockNewsEntries.filter(
-    (entry) =>
-      entry.title.toLowerCase().includes(query.toLowerCase()) ||
-      entry.description.toLowerCase().includes(query.toLowerCase()) ||
-      entry.tags.some((tag) => tag.toLowerCase().includes(query.toLowerCase())),
-  )
+export async function searchNews(query: string): Promise<SearchResponse> {
+  // Call your running backend (adjust base URL if different)
+  const res = await fetch("http://localhost:3000/search", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ query }),
+  });
+
+  if (!res.ok) {
+    throw new Error(`Search request failed: ${res.status} ${res.statusText}`);
+  }
+
+  const data = await res.json();
+  // data.fetchedEntries is what your backend sends
+
+  const results: NewsEntry[] = data.fetchedEntries.map((item: any) => ({
+    id: item._id,
+    title: item.title,
+    description: item.description,
+    content: item.content,
+    author: item.author ?? "",
+    publishedAt: item.publishedAt,
+    imageUrl: item.imageUrl ?? "",
+    tags: [],            // backend doesn’t send tags, leave empty or derive
+    url: "",             // backend doesn’t send a link; map if you add it
+  }));
 
   return {
-    results: filteredResults,
-    total: filteredResults.length,
+    results,
+    total: results.length,
     query,
-  }
+  };
 }
+
 
 export async function getWebhookFeed(): Promise<WebhookEvent[]> {
   // Simulate API delay
