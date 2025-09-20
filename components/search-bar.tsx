@@ -23,7 +23,11 @@ const sampleQueries = [
 export function SearchBar({ onSearch }: SearchBarProps) {
   const [query, setQuery] = useState("")
   const [placeholderIndex, setPlaceholderIndex] = useState(0)
-  const [isSearching, setIsSearching] = useState(false)
+  const [isSearching, setIsSearching] = useState(false);
+
+   // 👉 new state
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [loadingSuggest, setLoadingSuggest] = useState(false);
 
   // Cycle through placeholder text
   useEffect(() => {
@@ -32,7 +36,29 @@ export function SearchBar({ onSearch }: SearchBarProps) {
     }, 2000)
 
     return () => clearInterval(interval)
-  }, [])
+  }, []);
+
+  useEffect(() => {
+      if (!query.trim() || isSearching) {
+    setSuggestions([]);
+    return;
+  }
+    const handler = setTimeout(async () => {
+      setLoadingSuggest(true);
+      try {
+        const res = await fetch(
+          `http://localhost:3000/advanced-suggestions?q=${encodeURIComponent(query)}`
+        );
+        const data: string[] = await res.json();
+        setSuggestions(data);
+      } catch (e) {
+        console.error("suggestion error", e);
+      } finally {
+        setLoadingSuggest(false);
+      }
+    }, 300); // 300 ms debounce
+    return () => clearTimeout(handler);
+  }, [query]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -41,6 +67,10 @@ export function SearchBar({ onSearch }: SearchBarProps) {
     setIsSearching(true)
     await onSearch(query.trim())
     setIsSearching(false)
+    setSuggestions([]);
+
+    console.log("Search submitted:", query.trim());
+
   }
 
   const handleQuickSearch = async (searchQuery: string) => {
@@ -48,6 +78,8 @@ export function SearchBar({ onSearch }: SearchBarProps) {
     setIsSearching(true)
     await onSearch(searchQuery)
     setIsSearching(false)
+    console.log("Quick submitted:", searchQuery);
+    setSuggestions([]);
   }
 
   return (
@@ -72,6 +104,26 @@ export function SearchBar({ onSearch }: SearchBarProps) {
           </Button>
         </div>
       </form>
+
+      {/* 👉 Live suggestions dropdown */}
+      {query && suggestions.length > 0 && (
+        <ul className="absolute z-50 mt-1 w-full bg-white dark:bg-neutral-800 border rounded-lg shadow-lg max-h-60 overflow-y-auto">
+          {loadingSuggest && (
+            <li className="px-4 py-2 text-sm text-muted-foreground">
+              Loading…
+            </li>
+          )}
+          {suggestions.map((s) => (
+            <li
+              key={s}
+              onClick={() => handleQuickSearch(s)}
+              className="px-4 py-2 cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-700"
+            >
+              {s}
+            </li>
+          ))}
+        </ul>
+      )}
 
       {/* Quick Search Suggestions */}
       <div className="flex flex-wrap gap-2">
