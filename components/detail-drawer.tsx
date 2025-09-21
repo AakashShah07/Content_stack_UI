@@ -46,12 +46,12 @@ export function DetailDrawer({ entry, onClose }: DetailDrawerProps) {
 
   return (
     <Drawer open={!!entry} onOpenChange={(open) => !open && onClose()}>
-      <DrawerContent className="h-[90vh] glass-strong border-glass-border">
+      <DrawerContent className="max-h-screen h-full glass-strong border-glass-border">
         <DrawerHeader className="border-b border-glass-border">
           <div className="flex items-center justify-between">
-            <DrawerTitle className="text-xl font-bold text-left">Article Details</DrawerTitle>
+            <DrawerTitle className="text-xl font-bold text-left break-words max-w-[80vw]">Article Details</DrawerTitle>
             <div className="flex items-center gap-2">
-              <Button
+              {/* <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => setIsFavorited(!isFavorited)}
@@ -61,7 +61,7 @@ export function DetailDrawer({ entry, onClose }: DetailDrawerProps) {
               </Button>
               <Button variant="ghost" size="icon" onClick={handleShare} className="hover:neon-glow">
                 <Share2 className="w-5 h-5" />
-              </Button>
+              </Button> */}
               {entry.url && (
                 <Button variant="ghost" size="icon" onClick={handleExternalLink} className="hover:neon-glow">
                   <ExternalLink className="w-5 h-5" />
@@ -74,7 +74,7 @@ export function DetailDrawer({ entry, onClose }: DetailDrawerProps) {
           </div>
         </DrawerHeader>
 
-        <ScrollArea className="flex-1 p-6">
+        <ScrollArea className="flex-1 p-6 min-h-0">
           <div className="max-w-4xl mx-auto space-y-6">
             {/* Hero Image */}
             {!imageError && entry.imageUrl && (
@@ -100,7 +100,7 @@ export function DetailDrawer({ entry, onClose }: DetailDrawerProps) {
             </div>
 
             {/* Title */}
-            <h1 className="text-3xl md:text-4xl font-bold leading-tight bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+            <h1 className="text-2xl md:text-2xl font-bold leading-tight bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent break-words max-w-full">
               {entry.title}
             </h1>
 
@@ -122,43 +122,21 @@ export function DetailDrawer({ entry, onClose }: DetailDrawerProps) {
 
             {/* Description */}
             <div className="glass rounded-lg p-4">
-              <p className="text-lg text-muted-foreground leading-relaxed">{entry.description}</p>
+              <p className="text-lg text-muted-foreground leading-relaxed break-words max-w-full">{entry.description}</p>
             </div>
 
             {/* Content */}
             <div className="prose prose-invert max-w-none">
               <div className="text-foreground leading-relaxed space-y-4">
                 {entry.content.split("\n\n").map((paragraph, index) => (
-                  <p key={index} className="text-base leading-7">
+                  <p key={index} className="text-base leading-7 break-words max-w-full">
                     {paragraph}
                   </p>
                 ))}
               </div>
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex flex-wrap gap-3 pt-6 border-t border-glass-border">
-              <Button
-                onClick={() => setIsFavorited(!isFavorited)}
-                variant={isFavorited ? "default" : "outline"}
-                className={
-                  isFavorited ? "bg-gradient-to-r from-red-600 to-pink-600 neon-glow" : "glass hover:neon-glow"
-                }
-              >
-                <Heart className={`w-4 h-4 mr-2 ${isFavorited ? "fill-current" : ""}`} />
-                {isFavorited ? "Saved" : "Save Article"}
-              </Button>
-              <Button onClick={handleShare} variant="outline" className="glass hover:neon-glow bg-transparent">
-                <Share2 className="w-4 h-4 mr-2" />
-                Share
-              </Button>
-              {entry.url && (
-                <Button onClick={handleExternalLink} variant="outline" className="glass hover:neon-glow bg-transparent">
-                  <ExternalLink className="w-4 h-4 mr-2" />
-                  Read Original
-                </Button>
-              )}
-            </div>
+           
           </div>
         </ScrollArea>
       </DrawerContent>

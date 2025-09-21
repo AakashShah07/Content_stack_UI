@@ -95,42 +95,7 @@ export function Sidebar({ collapsed, onToggleCollapse }: SidebarProps) {
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
           >
-            {/* Date Range Filter */}
-            <div className="p-4 border-t border-glass-border">
-              <h3 className="font-medium mb-3 flex items-center gap-2">
-                <CalendarIcon className="w-4 h-4" />
-                Date Range
-              </h3>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button variant="outline" className="w-full justify-start text-left font-normal glass bg-transparent">
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {dateRange.from ? (
-                      dateRange.to ? (
-                        <>
-                          {format(dateRange.from, "LLL dd, y")} - {format(dateRange.to, "LLL dd, y")}
-                        </>
-                      ) : (
-                        format(dateRange.from, "LLL dd, y")
-                      )
-                    ) : (
-                      <span>Pick a date range</span>
-                    )}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 glass" align="start">
-                  <Calendar
-                    initialFocus
-                    mode="range"
-                    defaultMonth={dateRange.from}
-                    selected={dateRange}
-                    onSelect={setDateRange}
-                    numberOfMonths={2}
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
-
+            
             {/* Tags Filter */}
             <div className="p-4 border-t border-glass-border flex-1">
               <div className="flex items-center justify-between mb-3">

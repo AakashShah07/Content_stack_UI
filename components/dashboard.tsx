@@ -73,9 +73,9 @@ export function Dashboard() {
           animate="visible"
         >
           {/* Left Sidebar */}
-          <motion.div variants={itemVariants}>
+          {/* <motion.div variants={itemVariants}>
             <Sidebar collapsed={sidebarCollapsed} onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)} />
-          </motion.div>
+          </motion.div> */}
 
           {/* Main Content Area */}
           <motion.div className="flex-1 flex flex-col gap-6 min-w-0" variants={itemVariants}>

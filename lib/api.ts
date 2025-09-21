@@ -10,6 +10,7 @@ export interface NewsEntry {
   imageUrl?: string
   tags: string[]
   url?: string
+  category?: string
 }
 
 export interface WebhookEvent {
@@ -26,45 +27,7 @@ export interface SearchResponse {
   query: string
 }
 
-// Mock data for development
-const mockNewsEntries: NewsEntry[] = [
-  {
-    id: "1",
-    title: "AI Revolution in Healthcare: New Breakthrough in Medical Diagnosis",
-    description: "Researchers develop AI system that can diagnose rare diseases with 95% accuracy",
-    content:
-      "A groundbreaking AI system has been developed that can diagnose rare diseases with unprecedented accuracy...",
-    author: "Dr. Sarah Chen",
-    publishedAt: "2024-01-15T10:30:00Z",
-    imageUrl: "/ai-medical-diagnosis-technology.jpg",
-    tags: ["AI", "Healthcare", "Technology", "Medical"],
-    url: "https://example.com/ai-healthcare-breakthrough",
-  },
-  {
-    id: "2",
-    title: "Cryptocurrency Market Sees Major Surge Following New Regulations",
-    description: "Bitcoin and Ethereum prices jump 15% after favorable regulatory announcements",
-    content:
-      "The cryptocurrency market experienced significant gains today following announcements of clearer regulatory frameworks...",
-    author: "Michael Rodriguez",
-    publishedAt: "2024-01-15T08:15:00Z",
-    imageUrl: "/cryptocurrency-bitcoin-trading-charts.jpg",
-    tags: ["Cryptocurrency", "Bitcoin", "Finance", "Regulation"],
-    url: "https://example.com/crypto-surge",
-  },
-  {
-    id: "3",
-    title: "Climate Change Summit Reaches Historic Agreement on Carbon Emissions",
-    description: "World leaders commit to ambitious new targets for reducing global carbon footprint",
-    content:
-      "In a landmark decision, world leaders at the Global Climate Summit have agreed to unprecedented measures...",
-    author: "Emma Thompson",
-    publishedAt: "2024-01-14T16:45:00Z",
-    imageUrl: "/climate-summit-leaders.png",
-    tags: ["Climate", "Environment", "Politics", "Global"],
-    url: "https://example.com/climate-agreement",
-  },
-]
+
 
 const mockWebhookEvents: WebhookEvent[] = [
   {
@@ -118,7 +81,7 @@ export async function searchNews(query: string): Promise<SearchResponse> {
     publishedAt: item.publishedAt,
     imageUrl: item.imageUrl ?? "",
     tags: [],            // backend doesn’t send tags, leave empty or derive
-    url: "",             // backend doesn’t send a link; map if you add it
+    url: item.url.href,             // backend doesn’t send a link; map if you add it
   }));
 
   return {
