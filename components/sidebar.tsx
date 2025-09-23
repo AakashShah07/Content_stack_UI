@@ -12,16 +12,28 @@ import { cn } from "@/lib/utils"
 interface SidebarProps {
   collapsed: boolean
   onToggleCollapse: () => void
+  selectedTags: string[] // <-- Add this
+  setSelectedTags: (tags: string[]) => void // <-- Add this
 }
 
-const availableTags = ["AI", "Technology", "Healthcare", "Finance", "Politics", "Climate", "Cryptocurrency", "Science"]
+const availableTags = ["Business",
+  "Entertainment",
+  "General",
+  "Health",
+  "Science",
+  "Sports",
+  "Technology",]
 
-export function Sidebar({ collapsed, onToggleCollapse }: SidebarProps) {
-  const [selectedTags, setSelectedTags] = useState<string[]>([])
+export function Sidebar({ collapsed, onToggleCollapse, selectedTags, setSelectedTags }: SidebarProps) {
+  // const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [dateRange, setDateRange] = useState<{ from?: Date; to?: Date }>({})
 
   const toggleTag = (tag: string) => {
-    setSelectedTags((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]))
+    setSelectedTags(
+      selectedTags.includes(tag)
+        ? selectedTags.filter((t) => t !== tag)
+        : [...selectedTags, tag]
+    )
   }
 
   const clearFilters = () => {
@@ -59,33 +71,7 @@ export function Sidebar({ collapsed, onToggleCollapse }: SidebarProps) {
         </motion.div>
       </div>
 
-      {/* Navigation */}
-      <div className="p-4 space-y-2">
-        {[
-          { icon: Home, label: "Home" },
-          { icon: Filter, label: "Filters" },
-          { icon: Bookmark, label: "Saved" },
-        ].map(({ icon: Icon, label }) => (
-          <motion.div key={label} whileHover={{ x: 2 }} whileTap={{ scale: 0.98 }}>
-            <Button variant="ghost" className={cn("w-full justify-start hover:neon-glow", collapsed && "px-2")}>
-              <Icon className="w-4 h-4" />
-              <AnimatePresence>
-                {!collapsed && (
-                  <motion.span
-                    className="ml-2"
-                    initial={{ opacity: 0, width: 0 }}
-                    animate={{ opacity: 1, width: "auto" }}
-                    exit={{ opacity: 0, width: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    {label}
-                  </motion.span>
-                )}
-              </AnimatePresence>
-            </Button>
-          </motion.div>
-        ))}
-      </div>
+   
 
       <AnimatePresence>
         {!collapsed && (

@@ -34,12 +34,15 @@ export function Dashboard() {
   const [isLoading, setIsLoading] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+    const [selectedTags, setSelectedTags] = useState<string[]>([]) // <-- Add this
+
 
   const handleSearch = async (query: string) => {
+
     setIsLoading(true)
     setSearchQuery(query)
     try {
-      const response = await searchNews(query)
+      const response = await searchNews(query, selectedTags);
       setSearchResults(response.results)
     } catch (error) {
       console.error("Search failed:", error)
@@ -73,14 +76,25 @@ export function Dashboard() {
           animate="visible"
         >
           {/* Left Sidebar */}
-          {/* <motion.div variants={itemVariants}>
-            <Sidebar collapsed={sidebarCollapsed} onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)} />
-          </motion.div> */}
+          <motion.div variants={itemVariants}>
+          <Sidebar
+              collapsed={sidebarCollapsed}
+              onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
+              selectedTags={selectedTags} // <-- Pass selectedTags
+              setSelectedTags={setSelectedTags} // <-- Pass setter
+            />
+          </motion.div>
 
           {/* Main Content Area */}
           <motion.div className="flex-1 flex flex-col gap-6 min-w-0" variants={itemVariants}>
             {/* Search Bar */}
             <SearchBar onSearch={handleSearch} />
+
+            {searchQuery && searchResults.length > 0 && (
+    <div className="text-sm text-muted-foreground mb-2">
+      Showing {searchResults.length} result{searchResults.length > 1 ? "s" : ""} for "<span className="font-semibold">{searchQuery}</span>"
+    </div>
+  )}
 
             {/* Results Grid */}
             <div className="flex-1 overflow-auto">

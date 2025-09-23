@@ -55,8 +55,8 @@ const mockWebhookEvents: WebhookEvent[] = [
 
 // API utilities for News Intelligence Hub
 
-export async function searchNews(query: string): Promise<SearchResponse> {
-  // Call your running backend (adjust base URL if different)
+export async function searchNews(query: string, category:string[]): Promise<SearchResponse> {
+  
   const res = await fetch("http://localhost:3000/search", {
     method: "POST",
     headers: {
@@ -72,17 +72,27 @@ export async function searchNews(query: string): Promise<SearchResponse> {
   const data = await res.json();
   // data.fetchedEntries is what your backend sends
 
-  const results: NewsEntry[] = data.fetchedEntries.map((item: any) => ({
-    id: item._id,
-    title: item.title,
-    description: item.description,
-    content: item.content,
-    author: item.author ?? "",
-    publishedAt: item.publishedAt,
-    imageUrl: item.imageUrl ?? "",
-    tags: [],            // backend doesn’t send tags, leave empty or derive
-    url: item.url.href,             // backend doesn’t send a link; map if you add it
-  }));
+  let results: NewsEntry[] = data.fetchedEntries
+    .filter((item: any) => item.score >= 0.6)
+    .map((item: any) => ({
+      id: item._id,
+      title: item.title,
+      description: item.description,
+      content: item.content,
+      author: item.author ?? "",
+      publishedAt: item.publishedAt,
+      imageUrl: item.imageUrl ?? "",
+      tags: [], // backend doesn’t send tags, leave empty or derive
+      url: item.url?.href || item.url,
+      category: item.category,
+    }));
+
+  // Filter by category if any are selected
+  if (category.length > 0) {
+    results = results.filter(entry =>
+      entry.category && category.includes(entry.category)
+    );
+  }
 
   return {
     results,

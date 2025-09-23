@@ -15,7 +15,6 @@ interface DetailDrawerProps {
 }
 
 export function DetailDrawer({ entry, onClose }: DetailDrawerProps) {
-  const [isFavorited, setIsFavorited] = useState(false)
   const [imageError, setImageError] = useState(false)
 
   if (!entry) return null
