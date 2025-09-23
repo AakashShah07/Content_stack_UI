@@ -1,4 +1,5 @@
 "use client"
+
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
@@ -28,7 +29,7 @@ export function Hero() {
     if (dashboardElement) {
       dashboardElement.scrollIntoView({ behavior: "smooth" })
     }
-  }
+  };
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -91,7 +92,7 @@ export function Hero() {
             >
               <Sparkles className="w-4 h-4 text-blue-400" />
             </motion.div>
-            <span className="text-sm font-medium text-blue-400">Powered by AI Intelligence</span>
+            <span className="text-sm font-medium text-blue-400">Powered by Vector Embeddings</span>
           </motion.div>
 
           <motion.h1

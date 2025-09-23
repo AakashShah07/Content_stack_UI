@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { Sidebar } from "@/components/sidebar"
 import { SearchBar } from "@/components/search-bar"
@@ -33,8 +33,8 @@ export function Dashboard() {
   const [selectedEntry, setSelectedEntry] = useState<NewsEntry | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
-    const [selectedTags, setSelectedTags] = useState<string[]>([]) // <-- Add this
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(true)
+  const [selectedTags, setSelectedTags] = useState<string[]>([]) // <-- Add this
 
 
   const handleSearch = async (query: string) => {
@@ -50,6 +50,12 @@ export function Dashboard() {
       setIsLoading(false)
     }
   }
+
+  useEffect(() => {
+    if (searchQuery) {
+      handleSearch(searchQuery)
+    }
+  }, [selectedTags])
 
   const handleCardClick = (entry: NewsEntry) => {
     setSelectedEntry(entry)

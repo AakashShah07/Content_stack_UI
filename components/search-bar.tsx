@@ -29,6 +29,9 @@ export function SearchBar({ onSearch }: SearchBarProps) {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [loadingSuggest, setLoadingSuggest] = useState(false);
 
+
+    const API_ENDPOINT = process.env.ENDPOINT || "http://localhost:3000";
+
   // Cycle through placeholder text
   useEffect(() => {
     const interval = setInterval(() => {
@@ -85,7 +88,7 @@ export function SearchBar({ onSearch }: SearchBarProps) {
   return (
     <div className="space-y-4">
       {/* Main Search Bar */}
-      <form onSubmit={handleSubmit} className="relative">
+      <form onSubmit={handleSubmit} className="relative w-full max-w-md mx-auto">
         <div className="relative glass rounded-full p-2 neon-glow">
           <Input
             type="text"
@@ -107,7 +110,12 @@ export function SearchBar({ onSearch }: SearchBarProps) {
 
       {/* 👉 Live suggestions dropdown */}
       {query && suggestions.length > 0 && (
-        <ul className="absolute z-50 mt-1 w-full bg-white dark:bg-neutral-800 border rounded-lg shadow-lg max-h-60 overflow-y-auto">
+        <ul className="absolute left-0 right-0 mt-1
+                 bg-white dark:bg-neutral-800
+                 border border-neutral-200 dark:border-neutral-700
+                 rounded-xl shadow-xl
+                 max-h-60 overflow-y-auto
+                 w-full z-50">
           {loadingSuggest && (
             <li className="px-4 py-2 text-sm text-muted-foreground">
               Loading…

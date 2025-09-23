@@ -50,17 +50,7 @@ export function DetailDrawer({ entry, onClose }: DetailDrawerProps) {
           <div className="flex items-center justify-between">
             <DrawerTitle className="text-xl font-bold text-left break-words max-w-[80vw]">Article Details</DrawerTitle>
             <div className="flex items-center gap-2">
-              {/* <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setIsFavorited(!isFavorited)}
-                className="hover:neon-glow"
-              >
-                <Heart className={`w-5 h-5 ${isFavorited ? "fill-red-500 text-red-500" : ""}`} />
-              </Button>
-              <Button variant="ghost" size="icon" onClick={handleShare} className="hover:neon-glow">
-                <Share2 className="w-5 h-5" />
-              </Button> */}
+             
               {entry.url && (
                 <Button variant="ghost" size="icon" onClick={handleExternalLink} className="hover:neon-glow">
                   <ExternalLink className="w-5 h-5" />

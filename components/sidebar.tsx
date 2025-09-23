@@ -18,7 +18,6 @@ interface SidebarProps {
 
 const availableTags = ["Business",
   "Entertainment",
-  "General",
   "Health",
   "Science",
   "Sports",
